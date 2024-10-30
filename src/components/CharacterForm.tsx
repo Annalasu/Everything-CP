@@ -48,7 +48,7 @@ export const CharacterForm: React.FC<CharacterFormProps> = ({ onSubmit, isLoadin
                        dark:bg-gray-700 dark:text-gray-100
                        focus:ring-2 focus:ring-purple-500 focus:border-transparent
                        dark:focus:ring-purple-400"
-              placeholder="描述角色的背景故事、性格特点等"
+              placeholder="描述角色的性别、背景故事、性格特点等"
               rows={3}
               required
             />
@@ -86,7 +86,7 @@ export const CharacterForm: React.FC<CharacterFormProps> = ({ onSubmit, isLoadin
                        dark:bg-gray-700 dark:text-gray-100
                        focus:ring-2 focus:ring-purple-500 focus:border-transparent
                        dark:focus:ring-purple-400"
-              placeholder="描述角色的背景故事、性格特点等"
+              placeholder="描述角色的性别、背景故事、性格特点等"
               rows={3}
               required
             />
