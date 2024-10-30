@@ -54,7 +54,7 @@
 
 ## 🤝 贡献
 
-项目基于bolt和cursor开发，但仍然欢迎提交 Issue 和 Pull Request！我会尽可能优化和维护。
+项目基于[bolt.new](https://bolt.new)和cursor开发，但仍然欢迎提交 Issue 和 Pull Request！我会尽可能优化和维护。
 
 ## 🙏 大模型调用
 
