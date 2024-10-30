@@ -52,7 +52,7 @@ export class OpenAIService {
       method: 'POST',
       headers: this.headers,
       body: JSON.stringify({
-        model: 'gpt-4-mini',
+        model: 'gpt-4o-mini',
         messages: [
           {
             role: 'system',

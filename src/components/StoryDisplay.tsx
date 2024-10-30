@@ -17,10 +17,12 @@ export const StoryDisplay: React.FC<StoryDisplayProps> = ({ story, loading, onRe
       return;
     }
 
+    setDisplayedStory('');
+    
     let index = 0;
     const interval = setInterval(() => {
       if (index < story.length) {
-        setDisplayedStory((prev) => prev + story[index]);
+        setDisplayedStory(prev => story.slice(0, index + 1));
         index++;
       } else {
         clearInterval(interval);
@@ -44,7 +46,7 @@ export const StoryDisplay: React.FC<StoryDisplayProps> = ({ story, loading, onRe
           <button
             onClick={copyToClipboard}
             className="p-2 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100"
-            title="复制内容"
+            title={copied ? "已复制" : "复制内容"}
           >
             <Copy className="w-5 h-5" />
           </button>
