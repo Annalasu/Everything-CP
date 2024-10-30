@@ -4,7 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { config } from '../config/env';
 
 interface SettingsProps {
-  onSave: (settings: typeof config.openai & { apiBaseUrl: string }) => void;
+  onSave: (settings: typeof config.openai & { 
+    apiBaseUrl: string,
+    useSiliconFlow: boolean,
+    siliconFlowKey: string 
+  }) => void;
 }
 
 export const Settings: React.FC<SettingsProps> = ({ onSave }) => {
@@ -14,6 +18,8 @@ export const Settings: React.FC<SettingsProps> = ({ onSave }) => {
     apiBaseUrl: localStorage.getItem('api_base_url') || config.apiBaseUrl,
     model: localStorage.getItem('openai_model') || config.openai.model,
     imageModel: localStorage.getItem('openai_image_model') || config.openai.imageModel,
+    useSiliconFlow: localStorage.getItem('use_silicon_flow') === 'true',
+    siliconFlowKey: localStorage.getItem('silicon_flow_key') || '',
   });
 
   const handleSave = () => {
@@ -21,6 +27,8 @@ export const Settings: React.FC<SettingsProps> = ({ onSave }) => {
     localStorage.setItem('api_base_url', settings.apiBaseUrl);
     localStorage.setItem('openai_model', settings.model);
     localStorage.setItem('openai_image_model', settings.imageModel);
+    localStorage.setItem('use_silicon_flow', settings.useSiliconFlow.toString());
+    localStorage.setItem('silicon_flow_key', settings.siliconFlowKey);
     onSave(settings);
     setIsOpen(false);
   };
@@ -111,6 +119,36 @@ export const Settings: React.FC<SettingsProps> = ({ onSave }) => {
                     className="w-full px-3 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                     placeholder="dall-e-3"
                   />
+                </div>
+
+                <div className="space-y-4 border-t pt-4 mt-4">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="useSiliconFlow"
+                      checked={settings.useSiliconFlow}
+                      onChange={(e) => setSettings({ ...settings, useSiliconFlow: e.target.checked })}
+                      className="w-4 h-4 text-purple-600 rounded focus:ring-purple-500"
+                    />
+                    <label htmlFor="useSiliconFlow" className="ml-2 text-sm font-medium text-gray-700">
+                      使用硅基流动生成图像
+                    </label>
+                  </div>
+
+                  {settings.useSiliconFlow && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        硅基流动 API Key
+                      </label>
+                      <input
+                        type="password"
+                        value={settings.siliconFlowKey}
+                        onChange={(e) => setSettings({ ...settings, siliconFlowKey: e.target.value })}
+                        className="w-full px-3 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        placeholder="输入硅基流动 API Key"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 
