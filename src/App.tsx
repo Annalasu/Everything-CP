@@ -32,12 +32,18 @@ function App() {
     setDarkMode(!darkMode);
   };
 
-  const handleSettingsSave = useCallback((newSettings: typeof config.openai & { apiBaseUrl: string }) => {
+  const handleSettingsSave = useCallback((newSettings: typeof config.openai & { 
+    apiBaseUrl: string,
+    useSiliconFlow: boolean,
+    siliconFlowKey: string 
+  }) => {
     OpenAIService.updateConfig({
       apiKey: newSettings.apiKey,
       apiBaseUrl: newSettings.apiBaseUrl,
       model: newSettings.model,
       imageModel: newSettings.imageModel,
+      useSiliconFlow: newSettings.useSiliconFlow,
+      siliconFlowKey: newSettings.siliconFlowKey,
     });
   }, []);
 

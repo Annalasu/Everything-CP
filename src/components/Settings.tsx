@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Settings as SettingsIcon, X, Save } from 'lucide-react';
+import { Settings as SettingsIcon, X, Save, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { config } from '../config/env';
 
@@ -14,6 +14,8 @@ interface SettingsProps {
 
 export const Settings: React.FC<SettingsProps> = ({ onSave, darkMode }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showOpenAIKey, setShowOpenAIKey] = useState(false);
+  const [showSiliconFlowKey, setShowSiliconFlowKey] = useState(false);
   const [settings, setSettings] = useState({
     apiKey: localStorage.getItem('openai_api_key') || '',
     apiBaseUrl: localStorage.getItem('api_base_url') || config.apiBaseUrl,
@@ -33,6 +35,46 @@ export const Settings: React.FC<SettingsProps> = ({ onSave, darkMode }) => {
     onSave(settings);
     setIsOpen(false);
   };
+
+  const PasswordInput = ({ 
+    value, 
+    onChange, 
+    show, 
+    onToggleShow, 
+    placeholder 
+  }: { 
+    value: string; 
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; 
+    show: boolean; 
+    onToggleShow: () => void; 
+    placeholder: string;
+  }) => (
+    <div className="relative">
+      <input
+        type={show ? "text" : "password"}
+        value={value}
+        onChange={onChange}
+        className="w-full px-3 py-2 pr-10 rounded-lg border dark:border-gray-600 
+                 dark:bg-gray-700 dark:text-gray-100
+                 focus:ring-2 focus:ring-purple-500 focus:border-transparent
+                 dark:focus:ring-purple-400"
+        placeholder={placeholder}
+      />
+      <button
+        type="button"
+        onClick={onToggleShow}
+        className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5
+                 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200
+                 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+      >
+        {show ? (
+          <EyeOff className="w-4 h-4" />
+        ) : (
+          <Eye className="w-4 h-4" />
+        )}
+      </button>
+    </div>
+  );
 
   return (
     <>
@@ -63,25 +105,22 @@ export const Settings: React.FC<SettingsProps> = ({ onSave, darkMode }) => {
                 <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">API设置</h2>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                 </button>
               </div>
 
               <div className="p-4 space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     OpenAI API Key
                   </label>
-                  <input
-                    type="password"
+                  <PasswordInput
                     value={settings.apiKey}
                     onChange={(e) => setSettings({ ...settings, apiKey: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg border dark:border-gray-600 
-                             dark:bg-gray-700 dark:text-gray-100
-                             focus:ring-2 focus:ring-purple-500 focus:border-transparent
-                             dark:focus:ring-purple-400"
+                    show={showOpenAIKey}
+                    onToggleShow={() => setShowOpenAIKey(!showOpenAIKey)}
                     placeholder="sk-..."
                   />
                 </div>
@@ -143,24 +182,21 @@ export const Settings: React.FC<SettingsProps> = ({ onSave, darkMode }) => {
                       onChange={(e) => setSettings({ ...settings, useSiliconFlow: e.target.checked })}
                       className="w-4 h-4 text-purple-600 rounded focus:ring-purple-500"
                     />
-                    <label htmlFor="useSiliconFlow" className="ml-2 text-sm font-medium text-gray-700">
+                    <label htmlFor="useSiliconFlow" className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                       使用硅基流动生成图像
                     </label>
                   </div>
 
                   {settings.useSiliconFlow && (
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         硅基流动 API Key
                       </label>
-                      <input
-                        type="password"
+                      <PasswordInput
                         value={settings.siliconFlowKey}
                         onChange={(e) => setSettings({ ...settings, siliconFlowKey: e.target.value })}
-                        className="w-full px-3 py-2 rounded-lg border dark:border-gray-600 
-                                 dark:bg-gray-700 dark:text-gray-100
-                                 focus:ring-2 focus:ring-purple-500 focus:border-transparent
-                                 dark:focus:ring-purple-400"
+                        show={showSiliconFlowKey}
+                        onToggleShow={() => setShowSiliconFlowKey(!showSiliconFlowKey)}
                         placeholder="输入硅基流动 API Key"
                       />
                     </div>
