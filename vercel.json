@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://api.openai.com/v1/:path*"
+    }
+  ],
+  "github": {
+    "silent": true
+  },
+  "framework": "vite"
+} 

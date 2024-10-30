@@ -8,6 +8,7 @@ import { Character, GenerateResponse } from './types';
 import { OpenAIService } from './services/openai';
 import { Heart, ArrowLeft, Moon, Sun } from 'lucide-react';
 import { config } from './config/env';
+import { PasswordModal } from './components/PasswordModal';
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -18,6 +19,9 @@ function App() {
   const [darkMode, setDarkMode] = useState(() =>
     localStorage.getItem('darkMode') === 'true'
   );
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return !config.sitePassword || localStorage.getItem('authenticated') === 'true'
+  });
 
   useEffect(() => {
     if (darkMode) {
@@ -82,6 +86,15 @@ function App() {
     setError(null);
     setCharacters(null);
   };
+
+  const handlePasswordSubmit = (password: string) => {
+    setIsAuthenticated(true);
+    localStorage.setItem('authenticated', 'true');
+  };
+
+  if (!isAuthenticated) {
+    return <PasswordModal isOpen={true} onSubmit={handlePasswordSubmit} />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-rose-100 
