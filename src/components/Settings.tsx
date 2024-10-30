@@ -4,10 +4,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { config } from '../config/env';
 
 interface SettingsProps {
-  onSave: (settings: typeof config.openai & { 
+  onSave: (settings: typeof config.openai & {
     apiBaseUrl: string,
     useSiliconFlow: boolean,
-    siliconFlowKey: string 
+    siliconFlowKey: string
   }) => void;
   darkMode?: boolean;
 }
@@ -17,36 +17,61 @@ export const Settings: React.FC<SettingsProps> = ({ onSave, darkMode }) => {
   const [showOpenAIKey, setShowOpenAIKey] = useState(false);
   const [showSiliconFlowKey, setShowSiliconFlowKey] = useState(false);
   const [settings, setSettings] = useState({
-    apiKey: localStorage.getItem('openai_api_key') || '',
-    apiBaseUrl: localStorage.getItem('api_base_url') || config.apiBaseUrl,
-    model: localStorage.getItem('openai_model') || config.openai.model,
-    imageModel: localStorage.getItem('openai_image_model') || config.openai.imageModel,
-    useSiliconFlow: localStorage.getItem('use_silicon_flow') === 'true',
-    siliconFlowKey: localStorage.getItem('silicon_flow_key') || '',
+    apiKey: config.openai.apiKey || localStorage.getItem('openai_api_key') || '',
+    apiBaseUrl: config.apiBaseUrl || localStorage.getItem('api_base_url') || '',
+    model: config.openai.model || localStorage.getItem('openai_model') || '',
+    imageModel: config.openai.imageModel || localStorage.getItem('openai_image_model') || '',
+    useSiliconFlow: config.siliconFlow.enabled || localStorage.getItem('use_silicon_flow') === 'true',
+    siliconFlowKey: config.siliconFlow.apiKey || localStorage.getItem('silicon_flow_key') || '',
   });
 
+  useEffect(() => {
+    setSettings(prev => ({
+      ...prev,
+      apiKey: config.openai.apiKey || prev.apiKey,
+      apiBaseUrl: config.apiBaseUrl || prev.apiBaseUrl,
+      model: config.openai.model || prev.model,
+      imageModel: config.openai.imageModel || prev.imageModel,
+      useSiliconFlow: config.siliconFlow.enabled || prev.useSiliconFlow,
+      siliconFlowKey: config.siliconFlow.apiKey || prev.siliconFlowKey,
+    }));
+  }, []);
+
   const handleSave = () => {
-    localStorage.setItem('openai_api_key', settings.apiKey);
-    localStorage.setItem('api_base_url', settings.apiBaseUrl);
-    localStorage.setItem('openai_model', settings.model);
-    localStorage.setItem('openai_image_model', settings.imageModel);
-    localStorage.setItem('use_silicon_flow', settings.useSiliconFlow.toString());
-    localStorage.setItem('silicon_flow_key', settings.siliconFlowKey);
+    if (settings.apiKey !== config.openai.apiKey) {
+      localStorage.setItem('openai_api_key', settings.apiKey);
+    }
+    if (settings.apiBaseUrl !== config.apiBaseUrl) {
+      localStorage.setItem('api_base_url', settings.apiBaseUrl);
+    }
+    if (settings.model !== config.openai.model) {
+      localStorage.setItem('openai_model', settings.model);
+    }
+    if (settings.imageModel !== config.openai.imageModel) {
+      localStorage.setItem('openai_image_model', settings.imageModel);
+    }
+    if (settings.useSiliconFlow !== config.siliconFlow.enabled) {
+      localStorage.setItem('use_silicon_flow', settings.useSiliconFlow.toString());
+    }
+    if (settings.siliconFlowKey !== config.siliconFlow.apiKey) {
+      localStorage.setItem('silicon_flow_key', settings.siliconFlowKey);
+    }
+
     onSave(settings);
     setIsOpen(false);
   };
 
-  const PasswordInput = ({ 
-    value, 
-    onChange, 
-    show, 
-    onToggleShow, 
-    placeholder 
-  }: { 
-    value: string; 
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; 
-    show: boolean; 
-    onToggleShow: () => void; 
+  const PasswordInput = ({
+    value,
+    onChange,
+    show,
+    onToggleShow,
+    placeholder
+  }: {
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    show: boolean;
+    onToggleShow: () => void;
     placeholder: string;
   }) => (
     <div className="relative">

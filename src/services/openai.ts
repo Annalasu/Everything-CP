@@ -7,8 +7,8 @@ export class OpenAIService {
     apiBaseUrl: localStorage.getItem('api_base_url') || config.apiBaseUrl,
     model: localStorage.getItem('openai_model') || config.openai.model,
     imageModel: localStorage.getItem('openai_image_model') || config.openai.imageModel,
-    useSiliconFlow: localStorage.getItem('use_silicon_flow') === 'true',
-    siliconFlowKey: localStorage.getItem('silicon_flow_key') || '',
+    useSiliconFlow: config.siliconFlow.enabled || localStorage.getItem('use_silicon_flow') === 'true',
+    siliconFlowKey: config.siliconFlow.apiKey || localStorage.getItem('silicon_flow_key') || '',
   };
 
   private static get headers() {
