@@ -27,7 +27,7 @@
 - `VITE_OPENAI_API_KEY`: OpenAI API密钥
 - `VITE_OPENAI_MODEL`: 文本生成模型（默认：gpt-4o-mini）
 - `VITE_OPENAI_IMAGE_MODEL`: 图像生成模型（默认：dall-e-3）
-- `VITE_API_BASE_URL`: API基础URL（默认：/api）
+- `VITE_API_BASE_URL`: API基础URL（默认：/api）(官方格式：https://api.openai.com/v1)
 
 ### 可选的环境变量
 - `VITE_SILICON_FLOW_KEY`: 硅基流动API密钥
