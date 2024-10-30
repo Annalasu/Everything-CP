@@ -9,9 +9,10 @@ interface SettingsProps {
     useSiliconFlow: boolean,
     siliconFlowKey: string 
   }) => void;
+  darkMode?: boolean;
 }
 
-export const Settings: React.FC<SettingsProps> = ({ onSave }) => {
+export const Settings: React.FC<SettingsProps> = ({ onSave, darkMode }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [settings, setSettings] = useState({
     apiKey: localStorage.getItem('openai_api_key') || '',
@@ -37,11 +38,11 @@ export const Settings: React.FC<SettingsProps> = ({ onSave }) => {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 p-3 bg-white rounded-full shadow-lg hover:shadow-xl 
-                 transform hover:-translate-y-0.5 transition-all z-50"
+        className="fixed bottom-4 right-4 p-3 bg-white dark:bg-gray-800 rounded-full shadow-lg 
+                 hover:shadow-xl transform hover:-translate-y-0.5 transition-all z-50"
         title="设置"
       >
-        <SettingsIcon className="w-6 h-6 text-gray-700" />
+        <SettingsIcon className="w-6 h-6 text-gray-700 dark:text-gray-300" />
       </button>
 
       <AnimatePresence>
@@ -56,10 +57,10 @@ export const Settings: React.FC<SettingsProps> = ({ onSave }) => {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden"
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden"
             >
-              <div className="flex justify-between items-center p-4 border-b">
-                <h2 className="text-xl font-semibold text-gray-800">API设置</h2>
+              <div className="flex justify-between items-center p-4 border-b dark:border-gray-700">
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">API设置</h2>
                 <button
                   onClick={() => setIsOpen(false)}
                   className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -77,7 +78,10 @@ export const Settings: React.FC<SettingsProps> = ({ onSave }) => {
                     type="password"
                     value={settings.apiKey}
                     onChange={(e) => setSettings({ ...settings, apiKey: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-3 py-2 rounded-lg border dark:border-gray-600 
+                             dark:bg-gray-700 dark:text-gray-100
+                             focus:ring-2 focus:ring-purple-500 focus:border-transparent
+                             dark:focus:ring-purple-400"
                     placeholder="sk-..."
                   />
                 </div>
@@ -90,7 +94,10 @@ export const Settings: React.FC<SettingsProps> = ({ onSave }) => {
                     type="text"
                     value={settings.apiBaseUrl}
                     onChange={(e) => setSettings({ ...settings, apiBaseUrl: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-3 py-2 rounded-lg border dark:border-gray-600 
+                             dark:bg-gray-700 dark:text-gray-100
+                             focus:ring-2 focus:ring-purple-500 focus:border-transparent
+                             dark:focus:ring-purple-400"
                     placeholder="https://api.openai.com/v1"
                   />
                 </div>
@@ -103,7 +110,10 @@ export const Settings: React.FC<SettingsProps> = ({ onSave }) => {
                     type="text"
                     value={settings.model}
                     onChange={(e) => setSettings({ ...settings, model: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-3 py-2 rounded-lg border dark:border-gray-600 
+                             dark:bg-gray-700 dark:text-gray-100
+                             focus:ring-2 focus:ring-purple-500 focus:border-transparent
+                             dark:focus:ring-purple-400"
                     placeholder="gpt-4-turbo-preview"
                   />
                 </div>
@@ -116,7 +126,10 @@ export const Settings: React.FC<SettingsProps> = ({ onSave }) => {
                     type="text"
                     value={settings.imageModel}
                     onChange={(e) => setSettings({ ...settings, imageModel: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-3 py-2 rounded-lg border dark:border-gray-600 
+                             dark:bg-gray-700 dark:text-gray-100
+                             focus:ring-2 focus:ring-purple-500 focus:border-transparent
+                             dark:focus:ring-purple-400"
                     placeholder="dall-e-3"
                   />
                 </div>
@@ -144,7 +157,10 @@ export const Settings: React.FC<SettingsProps> = ({ onSave }) => {
                         type="password"
                         value={settings.siliconFlowKey}
                         onChange={(e) => setSettings({ ...settings, siliconFlowKey: e.target.value })}
-                        className="w-full px-3 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-3 py-2 rounded-lg border dark:border-gray-600 
+                                 dark:bg-gray-700 dark:text-gray-100
+                                 focus:ring-2 focus:ring-purple-500 focus:border-transparent
+                                 dark:focus:ring-purple-400"
                         placeholder="输入硅基流动 API Key"
                       />
                     </div>
@@ -152,7 +168,7 @@ export const Settings: React.FC<SettingsProps> = ({ onSave }) => {
                 </div>
               </div>
 
-              <div className="p-4 bg-gray-50 flex justify-end">
+              <div className="p-4 bg-gray-50 dark:bg-gray-700 flex justify-end">
                 <button
                   onClick={handleSave}
                   className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg

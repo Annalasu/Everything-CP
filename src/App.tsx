@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { CharacterForm } from './components/CharacterForm';
 import { StoryDisplay } from './components/StoryDisplay';
 import { AvatarDisplay } from './components/AvatarDisplay';
@@ -6,7 +6,7 @@ import { CPImage } from './components/CPImage';
 import { Settings } from './components/Settings';
 import { Character, GenerateResponse } from './types';
 import { OpenAIService } from './services/openai';
-import { Heart } from 'lucide-react';
+import { Heart, ArrowLeft, Moon, Sun } from 'lucide-react';
 import { config } from './config/env';
 
 function App() {
@@ -15,6 +15,22 @@ function App() {
   const [showCPImage, setShowCPImage] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [characters, setCharacters] = useState<{ character1: Character; character2: Character } | null>(null);
+  const [darkMode, setDarkMode] = useState(() => 
+    localStorage.getItem('darkMode') === 'true'
+  );
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('darkMode', darkMode.toString());
+  }, [darkMode]);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
 
   const handleSettingsSave = useCallback((newSettings: typeof config.openai & { apiBaseUrl: string }) => {
     OpenAIService.updateConfig({
@@ -54,16 +70,24 @@ function App() {
     }
   };
 
+  const handleReset = () => {
+    setResult(null);
+    setShowCPImage(false);
+    setError(null);
+    setCharacters(null);
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-rose-100">
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-rose-100 
+                    dark:from-gray-900 dark:via-purple-900 dark:to-gray-900 transition-colors duration-200">
       <div className="container mx-auto px-4 py-8 relative">
         <header className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">万物CP</h1>
-          <p className="text-gray-600">让AI为你创造独特的CP故事</p>
+          <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-2">万物CP</h1>
+          <p className="text-gray-600 dark:text-gray-300">让AI为你创造独特的CP故事</p>
         </header>
 
         {error && (
-          <div className="max-w-2xl mx-auto mb-6 bg-red-50 text-red-600 p-4 rounded-lg">
+          <div className="max-w-2xl mx-auto mb-6 bg-red-50 dark:bg-red-900/50 text-red-600 dark:text-red-200 p-4 rounded-lg">
             {error}
           </div>
         )}
@@ -93,7 +117,7 @@ function App() {
               onRegenerate={handleRegenerate}
             />
 
-            <div className="text-center">
+            <div className="text-center space-x-4">
               <button
                 onClick={() => setShowCPImage(true)}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 
@@ -102,6 +126,16 @@ function App() {
               >
                 <Heart className="w-5 h-5" />
                 开磕
+              </button>
+
+              <button
+                onClick={handleReset}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-700
+                         rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 
+                         transition-all border border-gray-200"
+              >
+                <ArrowLeft className="w-5 h-5" />
+                返回
               </button>
             </div>
           </div>
@@ -112,7 +146,21 @@ function App() {
           visible={showCPImage} 
           onClose={() => setShowCPImage(false)} 
         />
-        <Settings onSave={handleSettingsSave} />
+
+        <button
+          onClick={toggleDarkMode}
+          className="fixed bottom-4 left-4 p-3 bg-white dark:bg-gray-800 rounded-full shadow-lg 
+                   hover:shadow-xl transform hover:-translate-y-0.5 transition-all z-50"
+          title={darkMode ? "切换日间模式" : "切换夜间模式"}
+        >
+          {darkMode ? (
+            <Sun className="w-6 h-6 text-yellow-500" />
+          ) : (
+            <Moon className="w-6 h-6 text-gray-700" />
+          )}
+        </button>
+
+        <Settings onSave={handleSettingsSave} darkMode={darkMode} />
       </div>
     </div>
   );
