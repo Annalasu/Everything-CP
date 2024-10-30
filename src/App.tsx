@@ -15,7 +15,7 @@ function App() {
   const [showCPImage, setShowCPImage] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [characters, setCharacters] = useState<{ character1: Character; character2: Character } | null>(null);
-  const [darkMode, setDarkMode] = useState(() => 
+  const [darkMode, setDarkMode] = useState(() =>
     localStorage.getItem('darkMode') === 'true'
   );
 
@@ -141,10 +141,10 @@ function App() {
           </div>
         )}
 
-        <CPImage 
-          imageUrl={result?.cpImage || ''} 
-          visible={showCPImage} 
-          onClose={() => setShowCPImage(false)} 
+        <CPImage
+          imageUrl={result?.cpImage || ''}
+          visible={showCPImage}
+          onClose={() => setShowCPImage(false)}
         />
 
         <button
