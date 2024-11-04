@@ -17,45 +17,21 @@ export const Settings: React.FC<SettingsProps> = ({ onSave, darkMode }) => {
   const [showOpenAIKey, setShowOpenAIKey] = useState(false);
   const [showSiliconFlowKey, setShowSiliconFlowKey] = useState(false);
   const [settings, setSettings] = useState({
-    apiKey: config.openai.apiKey || localStorage.getItem('openai_api_key') || '',
-    apiBaseUrl: config.apiBaseUrl || localStorage.getItem('api_base_url') || '',
-    model: config.openai.model || localStorage.getItem('openai_model') || '',
-    imageModel: config.openai.imageModel || localStorage.getItem('openai_image_model') || '',
-    useSiliconFlow: config.siliconFlow.enabled || localStorage.getItem('use_silicon_flow') === 'true',
-    siliconFlowKey: config.siliconFlow.apiKey || localStorage.getItem('silicon_flow_key') || '',
+    apiKey: localStorage.getItem('openai_api_key') || '',
+    apiBaseUrl: localStorage.getItem('api_base_url') || '',
+    model: localStorage.getItem('openai_model') || '',
+    imageModel: localStorage.getItem('openai_image_model') || '',
+    useSiliconFlow: localStorage.getItem('use_silicon_flow') === 'true' || false,
+    siliconFlowKey: localStorage.getItem('silicon_flow_key') || '',
   });
 
-  useEffect(() => {
-    setSettings(prev => ({
-      ...prev,
-      apiKey: config.openai.apiKey || prev.apiKey,
-      apiBaseUrl: config.apiBaseUrl || prev.apiBaseUrl,
-      model: config.openai.model || prev.model,
-      imageModel: config.openai.imageModel || prev.imageModel,
-      useSiliconFlow: config.siliconFlow.enabled || prev.useSiliconFlow,
-      siliconFlowKey: config.siliconFlow.apiKey || prev.siliconFlowKey,
-    }));
-  }, []);
-
   const handleSave = () => {
-    if (settings.apiKey !== config.openai.apiKey) {
-      localStorage.setItem('openai_api_key', settings.apiKey);
-    }
-    if (settings.apiBaseUrl !== config.apiBaseUrl) {
-      localStorage.setItem('api_base_url', settings.apiBaseUrl);
-    }
-    if (settings.model !== config.openai.model) {
-      localStorage.setItem('openai_model', settings.model);
-    }
-    if (settings.imageModel !== config.openai.imageModel) {
-      localStorage.setItem('openai_image_model', settings.imageModel);
-    }
-    if (settings.useSiliconFlow !== config.siliconFlow.enabled) {
-      localStorage.setItem('use_silicon_flow', settings.useSiliconFlow.toString());
-    }
-    if (settings.siliconFlowKey !== config.siliconFlow.apiKey) {
-      localStorage.setItem('silicon_flow_key', settings.siliconFlowKey);
-    }
+    localStorage.setItem('openai_api_key', settings.apiKey);
+    localStorage.setItem('api_base_url', settings.apiBaseUrl);
+    localStorage.setItem('openai_model', settings.model);
+    localStorage.setItem('openai_image_model', settings.imageModel);
+    localStorage.setItem('use_silicon_flow', settings.useSiliconFlow.toString());
+    localStorage.setItem('silicon_flow_key', settings.siliconFlowKey);
 
     onSave(settings);
     setIsOpen(false);
